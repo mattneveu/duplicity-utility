@@ -6,6 +6,7 @@ Fedora/RHEL: `librsync duplicity python3-pyyaml python3-colorama python3-dateuti
 
 ## Configuration
 ### Duplicity Environment: /usr/local/etc/duplicity_env.sh
+Set environment variables for duplicity: GPG settings, S3/FTP credendials, etc.
 ```
 export AWS_ACCESS_KEY_ID="xxxxxx"
 export AWS_SECRET_ACCESS_KEY="xxxxxxx"
@@ -16,6 +17,7 @@ export DUPLICITY_ARCHIVE_DIR="/var/cache/duplicity"
 export DUPLICITY_OPTIONS="--s3-endpoint-url ${AWS_S3_ENDPOINT} --archive-dir=${DUPLICITY_ARCHIVE_DIR}"
 ```
 ### Backup jobs settings: /usr/local/etc/duplicity_backup_jobs.yaml
+Define your backup jobs. Recommendation to name the jobs: use fqdn and source directory in order to ensure unique and predictable name.
 ```YAML
 ---
 destination: 'boto3+s3://my-bucket-name/'
@@ -30,9 +32,6 @@ jobs:
   'myhostname-domain-tld__dump':
     source: '/dump'
     retention: 1
-    schedule:
-      minute: 0
-      hour: 14
     type: 'full'
     encrypt: false
     compress: true
@@ -42,8 +41,6 @@ jobs:
   'myhostname-domain-tld__var_log':
     source: '/var/log'
     retention: 3
-    schedule:
-      minute: 30
     fullifolder: 1
     pre_script: [/usr/local/bin/script.sh, arg1]
     abort_on_pre_script_failure: true
